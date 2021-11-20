@@ -116,6 +116,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.orange),
+            onPressed: () {
+              //passing to root
+              Navigator.of(context).pop();
+              // Navigator.push(
+              //     context, MaterialPageRoute(builder: (context) => Start()));
+            },
+          )),
       body: Center(
         child: SingleChildScrollView(
           child: Container(

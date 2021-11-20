@@ -1,4 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:major_project/model/user_model.dart';
+import 'package:major_project/screens/login_screen.dart';
+import 'package:major_project/screens/main_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -8,13 +13,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome"),
+        title: Text("WE-SHARE",
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0)),
         centerTitle: true,
+        // leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
       ),
+      drawer: MainDrawer(),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -22,6 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              // TextField(
+              //   decoration: InputDecoration(
+              //     hintText: "Source",
+              //   ),
+              // ),
               SizedBox(
                 height: 150,
                 child: Image.asset(
@@ -40,14 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10,
               ),
               Text(
-                "Name",
+                "${loggedInUser.firstName} ${loggedInUser.secondName}",
                 style: TextStyle(
                   color: Colors.black54,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
-                "Email",
+                "${loggedInUser.email}",
                 style: TextStyle(
                   color: Colors.black54,
                   fontWeight: FontWeight.w500,
@@ -58,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               ActionChip(
                 label: Text("Logout"),
-                onPressed: () {},
+                onPressed: () {
+                  logout(context);
+                },
               ),
               SizedBox(
                 height: 15,
@@ -68,5 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }

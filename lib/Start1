@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:major_project/Login.dart';
-import 'package:major_project/Register.dart';
+import 'package:major_project/Register';
 
 class Start extends StatefulWidget {
   Start({Key? key}) : super(key: key);

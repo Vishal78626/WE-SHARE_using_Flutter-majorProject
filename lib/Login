@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Homepage.dart';
-import 'Register.dart';
+import 'Register';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

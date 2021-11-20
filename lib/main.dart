@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:major_project/screens/login_screen.dart';
+import 'package:major_project/screens/Start.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Email And Password Login',
+      title: 'WE-SHARE',
       debugShowCheckedModeBanner: false,
       theme:
           ThemeData(primaryColor: Colors.orange, primarySwatch: Colors.orange),
-      home: LoginScreen(),
+      home: Start(),
     );
   }
 }
