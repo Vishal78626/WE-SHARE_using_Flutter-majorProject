@@ -51,6 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         firstNameEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
+      textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
         suffixIcon: Icon(Icons.account_circle),
         contentPadding: EdgeInsets.fromLTRB(10, 15, 20, 15),
@@ -80,6 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         secondNameEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
+      textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
         suffixIcon: Icon(Icons.account_circle),
         contentPadding: EdgeInsets.fromLTRB(10, 15, 20, 15),
@@ -163,7 +165,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       validator: (value) {
         if (confirmPasswordEditingController.text !=
             passwordEditingController.text) {
-          return "Password don't Match";
+          return "Password not Matched";
         }
         return null;
       },
@@ -223,6 +225,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           )),
       body: Center(
         child: SingleChildScrollView(
+          // reverse: true,
           child: Container(
             color: Colors.white,
             child: Padding(

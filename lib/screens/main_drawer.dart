@@ -1,8 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:major_project/screens/Demo.dart';
+import 'package:major_project/model/user_model.dart';
+import 'package:major_project/screens/Profile.dart';
+import 'package:major_project/screens/about.dart';
+import 'package:major_project/screens/login_screen.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends StatefulWidget {
   const MainDrawer({Key? key}) : super(key: key);
+
+  @override
+  _MainDrawerState createState() => _MainDrawerState();
+}
+
+class _MainDrawerState extends State<MainDrawer> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +37,7 @@ class MainDrawer extends StatelessWidget {
         children: <Widget>[
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(20),
             color: Theme.of(context).primaryColor,
             child: Center(
               child: Column(
@@ -32,13 +58,16 @@ class MainDrawer extends StatelessWidget {
                   //   ),
                   // ),
                   // own icon
+                  SizedBox(
+                    height: 20,
+                  ),
                   Icon(
                     Icons.account_circle,
-                    size: 150,
+                    size: 100,
                     color: Colors.white,
                   ),
                   Text(
-                    "Vishal Kumar",
+                    "${loggedInUser.firstName} ${loggedInUser.secondName}",
                     style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -48,7 +77,7 @@ class MainDrawer extends StatelessWidget {
                     height: 2,
                   ),
                   Text(
-                    "singhbadal992@gmail.com",
+                    "${loggedInUser.email}",
                     style: TextStyle(
                         // fontSize: 22.0,
                         fontWeight: FontWeight.bold,
@@ -68,32 +97,43 @@ class MainDrawer extends StatelessWidget {
             ),
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DetailScreen()));
+                  MaterialPageRoute(builder: (context) => ProfileScreen()));
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.info),
             title: Text(
-              'Settings',
+              'About us',
               style: TextStyle(
                 fontSize: 18,
                 // color: Colors.grey[700],
               ),
             ),
-            onTap: null,
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AboutScreen()));
+            },
           ),
           ListTile(
-            leading: Icon(Icons.arrow_back),
+            leading: Icon(Icons.logout),
             title: Text(
               'Logout',
               style: TextStyle(
                 fontSize: 18,
               ),
             ),
-            onTap: null,
+            onTap: () {
+              logout(context);
+            },
           ),
         ],
       ),
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }

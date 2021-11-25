@@ -30,8 +30,10 @@ class _StartState extends State<Start> {
             SizedBox(height: 10.0),
             Container(
               height: 350,
-              child: Image(image: AssetImage("images/start.png")),
-              // fit: BoxFit.contain,
+              child: Image(
+                image: AssetImage("images/start.png"),
+                fit: BoxFit.contain,
+              ),
             ),
             SizedBox(height: 25.0),
             RichText(
