@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:major_project/model/user_model.dart';
-// import 'package:major_project/screens/Start.dart';
 import 'package:major_project/screens/home_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -134,7 +133,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           return ("Password is required");
         }
         if (!regex.hasMatch(value)) {
-          return ("Please enter valid password");
+          return ("Please enter valid password min lenght 6");
         }
       },
       onSaved: (value) {
@@ -163,6 +162,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       controller: confirmPasswordEditingController,
       obscureText: _secureText1,
       validator: (value) {
+        if (value!.isEmpty) {
+          return ("Field is required");
+        }
         if (confirmPasswordEditingController.text !=
             passwordEditingController.text) {
           return "Password not Matched";
@@ -278,6 +280,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
+
+  //sign up function
 
   void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {

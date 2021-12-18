@@ -17,6 +17,7 @@ class _MainDrawerState extends State<MainDrawer> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
+  //fetching database objects in form of map
   @override
   void initState() {
     super.initState();
@@ -57,6 +58,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   //     ),
                   //   ),
                   // ),
+
                   // own icon
                   SizedBox(
                     height: 20,
@@ -131,6 +133,7 @@ class _MainDrawerState extends State<MainDrawer> {
     );
   }
 
+  //Logout function
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(

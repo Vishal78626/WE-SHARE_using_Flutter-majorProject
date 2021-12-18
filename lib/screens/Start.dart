@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+// import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:major_project/screens/login_screen.dart';
 import 'package:major_project/screens/registration_screen.dart';
 
@@ -26,6 +26,7 @@ class _StartState extends State<Start> {
     return Scaffold(
       body: Container(
         child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 10.0),
             Container(
@@ -98,11 +99,11 @@ class _StartState extends State<Start> {
             SizedBox(
               height: 20.0,
             ),
-            SignInButton(
-              Buttons.Google,
-              text: "Sign up with Google",
-              onPressed: () {},
-            )
+            // SignInButton(
+            //   Buttons.Google,
+            //   text: "Sign up with Google",
+            //   onPressed: () {},
+            // )
           ],
         ),
       ),

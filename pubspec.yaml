@@ -30,6 +30,7 @@ dependencies:
   flutter_native_splash: ^1.2.3
   flutter_signin_button: ^2.0.0
   fluttertoast: ^8.0.8
+  url_launcher: ^6.0.10
 
 flutter_native_splash:
   color: "#ffffff"

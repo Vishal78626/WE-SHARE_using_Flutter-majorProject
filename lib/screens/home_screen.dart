@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:major_project/model/user_model.dart';
 import 'package:major_project/screens/login_screen.dart';
 import 'package:major_project/screens/main_drawer.dart';
+import 'package:major_project/screens/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -17,13 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
+  bool isSignupScreen = false;
   //radiobutton
-  // int _value = 0;
   var _value = "null";
-
-  //dropdown
-  final items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
-  String? value;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -111,10 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            // TextButton(
-            //   child: Text('BUY TICKETS'),
-            //   onPressed: () {/* ... */},
-            // ),
             SizedBox(width: 8),
             TextButton(
               child: Text('Ride'),
@@ -126,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     ),
   );
-// var _value = "${loggedInUser.mode}";
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         iconTheme: IconThemeData(color: Colors.white),
-        // leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
       ),
       drawer: MainDrawer(),
       body: Center(
@@ -168,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  //Source TextField
                   TextFormField(
                     // enabled: false,
                     readOnly: _editableText,
@@ -212,86 +205,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
-                  // Container(
 
-                  //   padding: EdgeInsets.fromLTRB(15, 5, 10, 0),
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(10),
-                  //     border: Border.all(
-                  //       color: Colors.orange,
-                  //     ),
-                  //   ),
-                  //   child: DropdownButtonHideUnderline(
-                  //     child: DropdownButton<String>(
-                  //       hint: Text("Select item"),
-                  //       value: value,
-                  //       iconSize: 36,
-                  //       icon: Icon(
-                  //         Icons.arrow_drop_down,
-                  //         color: Colors.black,
-                  //       ),
-                  //       isExpanded: true,
-                  //       items: items.map(buildMenuItem).toList(),
-                  //       onChanged: (value) => setState(() => this.value = value),
-                  //     ),
-                  //   ),
-                  // ),
+                  //destination textfield
                   destinationField,
                   SizedBox(
                     height: 20,
                   ),
 
-                  // cardField,
-                  // SizedBox(
-                  //   height: 2,
-                  // ),
-                  // cardField,
-                  // SizedBox(
-                  //   height: 2,
-                  // ),
-                  // cardField,
-                  // Card(
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(10),
-                  //     side: BorderSide(color: Colors.orange),
-                  //   ),
-                  //   color: Colors.grey.shade200,
-                  //   child: Column(
-                  //     mainAxisSize: MainAxisSize.min,
-                  //     children: <Widget>[
-                  //       ListTile(
-                  //         leading: Icon(Icons.account_circle),
-                  //         title: Text("${loggedInUser.firstName}"),
-                  //         subtitle: Text('${loggedInUser.source} -> GNDEC'),
-                  //       ),
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.end,
-                  //         children: <Widget>[
-                  //           // TextButton(
-                  //           //   child: Text('BUY TICKETS'),
-                  //           //   onPressed: () {/* ... */},
-                  //           // ),
-                  //           SizedBox(width: 8),
-                  //           TextButton(
-                  //             child: Text('Ride'),
-                  //             onPressed: () {/* ... */},
-                  //           ),
-                  //           SizedBox(width: 8),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  //here
+                  //Radio Button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Radio(
                               value: 'Find Ride',
@@ -305,7 +233,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          // SelectableText("data"),
                           Text(
                             "Find Ride",
                             style: TextStyle(
@@ -313,11 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      // SizedBox(
-                      //   width: 10,
-                      // ),
                       Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Radio(
                               value: "Offer Ride",
@@ -328,9 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Fluttertoast.showToast(msg: _value);
                                 });
                               }),
-                          // SizedBox(
-                          //   width: 10,
-                          // ),
                           Text(
                             "Offer Ride",
                             style: TextStyle(
@@ -340,8 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  // SelectableText(
-                  //     "Sed ut perspiciatis unde omnis iste natus error sit voluptatem"),
+
+                  //Save Button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -350,8 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.orange,
                         child: MaterialButton(
+                          // minWidth: 200,
                           padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          // minWidth: MediaQuery.of(context).size.width,
                           onPressed: () {
                             if (_formKey.currentState!.validate() &&
                                 _value != 'null') {
@@ -373,7 +293,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               Fluttertoast.showToast(
                                   msg: 'Select Ride Mode Please!');
                             }
-                            // signUp(emailEditingController.text, passwordEditingController.text);
                           },
                           child: Text(
                             "Save",
@@ -388,8 +307,97 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   SizedBox(height: 20),
+
+                  //profile showing card
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: Colors.orange),
+                    ),
+                    color: Colors.grey.shade200,
+                    child: InkWell(
+                      splashColor: Colors.blue.withAlpha(30),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProfileScreen()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(Icons.account_circle),
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                        "${loggedInUser.firstName} ${loggedInUser.secondName}",
+                                        style: TextStyle(fontSize: 20)),
+                                  ),
+                                ],
+                              ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            '${loggedInUser.source} -> GNDEC',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "${loggedInUser.email}",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                letterSpacing: 0.8),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                SizedBox(width: 8),
+                                TextButton(
+                                  child: Text(
+                                    '${loggedInUser.mode}',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  onPressed: () {},
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  //Rides matches with same Location
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
-                    "Rides close to you : ",
+                    "Rides Matches with your Location : ",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.orange,
@@ -399,69 +407,1109 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 20,
                   ),
 
-                  Card(
-                    shape: RoundedRectangleBorder(
+                  //toogle setting
+
+                  Container(
+                    height: 400,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: Colors.orange),
+                      border: Border.all(
+                        color: Colors.orange,
+                      ),
                     ),
-                    color: Colors.grey.shade200,
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.account_circle),
-                          title: Text(
-                              "${loggedInUser.firstName} ${loggedInUser.secondName}",
-                              style: TextStyle(fontSize: 20)),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Text(
-                              '${loggedInUser.source} -> GNDEC',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
+                      children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            // TextButton(
-                            //   child: Text('BUY TICKETS'),
-                            //   onPressed: () {/* ... */},
-                            // ),
-                            SizedBox(width: 8),
-                            TextButton(
-                              child: Text(
-                                '${loggedInUser.mode}',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSignupScreen = false;
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5)),
+                                  Text(
+                                    "Find ride",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: isSignupScreen
+                                            ? Colors.black38
+                                            : Colors.black),
+                                  ),
+                                  if (!isSignupScreen)
+                                    Container(
+                                      margin: EdgeInsets.only(top: 3),
+                                      height: 2,
+                                      width: 100,
+                                      color: Colors.orange,
+                                    ),
+                                ],
                               ),
-                              onPressed: () {/* ... */},
                             ),
-                            SizedBox(width: 8),
+                            Container(
+                              height: 30,
+                              width: 2,
+                              color: Colors.orange,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSignupScreen = true;
+                                });
+                              },
+                              child: Column(children: [
+                                Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5)),
+                                Text(
+                                  "Offer Ride",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSignupScreen
+                                          ? Colors.black
+                                          : Colors.black38),
+                                ),
+                                if (isSignupScreen)
+                                  Container(
+                                    margin: EdgeInsets.only(top: 3),
+                                    height: 2,
+                                    width: 100,
+                                    color: Colors.orange,
+                                  ),
+                              ]),
+                            ),
                           ],
                         ),
+                        //Offer Ride
+                        if (isSignupScreen)
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 340,
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                border: Border.all(color: Colors.orange),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .where("source",
+                                        isEqualTo: "${loggedInUser.source}")
+                                    .where("mode", isEqualTo: "Offer Ride")
+                                    // .where("email", isNotEqualTo: "${loggedInUser.email}")
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            "No Data Available",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+
+                                  return Scrollbar(
+                                    thickness: 10,
+                                    radius: Radius.circular(50),
+                                    // isAlwaysShown: true,
+                                    child: ListView(
+                                      scrollDirection: Axis.vertical,
+                                      padding: EdgeInsets.all(10),
+                                      children:
+                                          snapshot.data!.docs.map((document) {
+                                        return Container(
+                                          child: Center(
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                              color: Colors.grey.shade100,
+                                              child: InkWell(
+                                                splashColor:
+                                                    Colors.blue.withAlpha(30),
+                                                onTap: () {
+                                                  _launchURL(
+                                                      document['email'],
+                                                      'WE-SHARE Ride',
+                                                      'Message');
+                                                  // Navigator.of(context).push(MaterialPageRoute(
+                                                  //     builder: (context) => CardDetail()));
+                                                  // print('Card tapped.');
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        leading: Icon(Icons
+                                                            .account_circle),
+                                                        title: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              child: RichText(
+                                                                  text: TextSpan(
+                                                                      text: document[
+                                                                          'firstName'],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20.0,
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " "),
+                                                                    TextSpan(
+                                                                        text: document[
+                                                                            'secondName'],
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20.0,
+                                                                            color:
+                                                                                Colors.black))
+                                                                  ])),
+                                                            ),
+                                                            // Expanded(
+                                                            //   child: Text(
+                                                            //       "xccxcxcbxcbxbxc"
+                                                            //       // document[
+                                                            //       //     'firstName']
+                                                            //       ,
+                                                            //       style:
+                                                            //           TextStyle(
+                                                            //         fontSize:
+                                                            //             20.0,
+                                                            //       )),
+                                                            // ),
+                                                            // SizedBox(width: 5),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'secondName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                          ],
+                                                        ),
+                                                        subtitle: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(top: 5),
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Expanded(
+                                                                    child:
+                                                                        RichText(
+                                                                            text: TextSpan(
+                                                                                text: document['source'],
+                                                                                style: TextStyle(fontSize: 17.0, color: Colors.black54),
+                                                                                children: <TextSpan>[
+                                                                          TextSpan(
+                                                                              text: " -> GNDEC",
+                                                                              style: TextStyle(fontSize: 16.0, color: Colors.black54))
+                                                                        ])),
+                                                                  ),
+                                                                  // Text(
+                                                                  //   document[
+                                                                  //       'source'],
+                                                                  //   style: TextStyle(
+                                                                  //       fontSize:
+                                                                  //           17),
+                                                                  // ),
+                                                                  // Text(
+                                                                  //     " -> GNDEC",
+                                                                  //     style: TextStyle(
+                                                                  //         fontSize:
+                                                                  //             16)),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 5),
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      document[
+                                                                          "email"],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          letterSpacing:
+                                                                              0.8),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: <Widget>[
+                                                          SizedBox(width: 8),
+                                                          TextButton(
+                                                            child: Text(
+                                                              document['mode'],
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            onPressed: () {
+                                                              print(Text(
+                                                                  document[
+                                                                      'email']));
+                                                              // print(document["email"]);
+                                                            },
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+
+                        //Find Ride
+                        if (!isSignupScreen)
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 340,
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                border: Border.all(color: Colors.orange),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .where("source",
+                                        isEqualTo: "${loggedInUser.source}")
+                                    .where("mode", isEqualTo: "Find Ride")
+                                    // .where("email",                                        isNotEqualTo: "${loggedInUser.email}")
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            "No Data Available",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+
+                                  return Scrollbar(
+                                    thickness: 10,
+                                    radius: Radius.circular(50),
+                                    // isAlwaysShown: true,
+                                    child: ListView(
+                                      scrollDirection: Axis.vertical,
+                                      padding: EdgeInsets.all(10),
+                                      children:
+                                          snapshot.data!.docs.map((document) {
+                                        return Container(
+                                          child: Center(
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                              color: Colors.grey.shade100,
+                                              child: InkWell(
+                                                splashColor:
+                                                    Colors.blue.withAlpha(30),
+                                                onTap: () {
+                                                  _launchURL(
+                                                      document['email'],
+                                                      'WE-SHARE Ride',
+                                                      'Message');
+                                                  // Navigator.of(context).push(MaterialPageRoute(
+                                                  //     builder: (context) => CardDetail()));
+                                                  // print('Card tapped.');
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        leading: Icon(Icons
+                                                            .account_circle),
+                                                        title: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              child: RichText(
+                                                                  text: TextSpan(
+                                                                      text: document[
+                                                                          'firstName'],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20.0,
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " "),
+                                                                    TextSpan(
+                                                                        text: document[
+                                                                            'secondName'],
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20.0,
+                                                                            color:
+                                                                                Colors.black))
+                                                                  ])),
+                                                            ),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'firstName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                            // SizedBox(width: 5),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'secondName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                          ],
+                                                        ),
+                                                        subtitle: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(top: 5),
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Expanded(
+                                                                    child:
+                                                                        RichText(
+                                                                            text: TextSpan(
+                                                                                text: document['source'],
+                                                                                style: TextStyle(fontSize: 17.0, color: Colors.black54),
+                                                                                children: <TextSpan>[
+                                                                          TextSpan(
+                                                                              text: " -> GNDEC",
+                                                                              style: TextStyle(fontSize: 16.0, color: Colors.black54))
+                                                                        ])),
+                                                                  ),
+                                                                  // Text(
+                                                                  //   document[
+                                                                  //       'source'],
+                                                                  //   style: TextStyle(
+                                                                  //       fontSize:
+                                                                  //           17),
+                                                                  // ),
+                                                                  // Text(
+                                                                  //     " -> GNDEC",
+                                                                  //     style: TextStyle(
+                                                                  //         fontSize:
+                                                                  //             16)),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 5),
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      document[
+                                                                          "email"],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          letterSpacing:
+                                                                              0.8),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: <Widget>[
+                                                          SizedBox(width: 8),
+                                                          TextButton(
+                                                            child: Text(
+                                                              document['mode'],
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            onPressed: () {
+                                                              // print(Text(                                                                  '${loggedInUser.email}'));
+                                                              print(document[
+                                                                  "email"]);
+                                                            },
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
 
-                  for (int i = 0; i < 3; i++) cardField
+                  //all available rides
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "All available Rides : ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                        fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
 
-                  //extra
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: <Widget>[
-                  //     FloatingActionButton(
-                  //         child: Icon(Icons.refresh),
-                  //         onPressed: () {
-                  //           Navigator.push(
-                  //               context,
-                  //               MaterialPageRoute(
-                  //                   builder: (context) => HomeScreen()));
-                  //         }),
-                  //   ],
-                  // ),
+                  //toogle setting in main container
+                  Container(
+                    height: 400,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.orange,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSignupScreen = false;
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5)),
+                                  Text(
+                                    "Find ride",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: isSignupScreen
+                                            ? Colors.black38
+                                            : Colors.black),
+                                  ),
+                                  if (!isSignupScreen)
+                                    Container(
+                                      margin: EdgeInsets.only(top: 3),
+                                      height: 2,
+                                      width: 100,
+                                      color: Colors.orange,
+                                    ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 30,
+                              width: 2,
+                              color: Colors.orange,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isSignupScreen = true;
+                                });
+                              },
+                              child: Column(children: [
+                                Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5)),
+                                Text(
+                                  "Offer Ride",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSignupScreen
+                                          ? Colors.black
+                                          : Colors.black38),
+                                ),
+                                if (isSignupScreen)
+                                  Container(
+                                    margin: EdgeInsets.only(top: 3),
+                                    height: 2,
+                                    width: 100,
+                                    color: Colors.orange,
+                                  ),
+                              ]),
+                            ),
+                          ],
+                        ),
 
-                  // FloatingActionButton(onPressed: () {}),
+                        //Offer Ride cards
+                        if (isSignupScreen)
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 340,
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                border: Border.all(color: Colors.orange),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    // .where("source", isEqualTo: "${loggedInUser.source}")
+                                    .where("mode", isEqualTo: "Offer Ride")
+                                    .orderBy("source")
+                                    // .where("email", isNotEqualTo: "${loggedInUser.email}")
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            "No Data Available",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+
+                                  return Scrollbar(
+                                    thickness: 10,
+                                    radius: Radius.circular(50),
+                                    // isAlwaysShown: true,
+                                    child: ListView(
+                                      scrollDirection: Axis.vertical,
+                                      padding: EdgeInsets.all(10),
+                                      children:
+                                          snapshot.data!.docs.map((document) {
+                                        return Container(
+                                          child: Center(
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                              color: Colors.grey.shade100,
+                                              child: InkWell(
+                                                splashColor:
+                                                    Colors.blue.withAlpha(30),
+                                                onTap: () {
+                                                  _launchURL(
+                                                      document['email'],
+                                                      'WE-SHARE Ride',
+                                                      'Message');
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        leading: Icon(Icons
+                                                            .account_circle),
+                                                        title: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              child: RichText(
+                                                                  text: TextSpan(
+                                                                      text: document[
+                                                                          'firstName'],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20.0,
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " "),
+                                                                    TextSpan(
+                                                                        text: document[
+                                                                            'secondName'],
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20.0,
+                                                                            color:
+                                                                                Colors.black))
+                                                                  ])),
+                                                            ),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'firstName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                            // SizedBox(width: 5),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'secondName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                          ],
+                                                        ),
+                                                        subtitle: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(top: 5),
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Expanded(
+                                                                    child:
+                                                                        RichText(
+                                                                            text: TextSpan(
+                                                                                text: document['source'],
+                                                                                style: TextStyle(fontSize: 17.0, color: Colors.black54),
+                                                                                children: <TextSpan>[
+                                                                          TextSpan(
+                                                                              text: " -> GNDEC",
+                                                                              style: TextStyle(fontSize: 16.0, color: Colors.black54))
+                                                                        ])),
+                                                                  ),
+                                                                  // Text(
+                                                                  //   document[
+                                                                  //       'source'],
+                                                                  //   style: TextStyle(
+                                                                  //       fontSize:
+                                                                  //           17),
+                                                                  // ),
+                                                                  // Text(
+                                                                  //     " -> GNDEC",
+                                                                  //     style: TextStyle(
+                                                                  //         fontSize:
+                                                                  //             16)),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 5),
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      document[
+                                                                          "email"],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          letterSpacing:
+                                                                              0.8),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: <Widget>[
+                                                          SizedBox(width: 8),
+                                                          TextButton(
+                                                            child: Text(
+                                                              document['mode'],
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            onPressed: () {
+                                                              print(Text(
+                                                                  document[
+                                                                      'email']));
+                                                              // print(document["email"]);
+                                                            },
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+
+                        //Find User card
+                        if (!isSignupScreen)
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 340,
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                border: Border.all(color: Colors.orange),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('users')
+                                    .where("mode", isEqualTo: "Find Ride")
+                                    .orderBy("source")
+
+                                    // .where("email",
+                                    //     isNotEqualTo: "${loggedInUser.email}")
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            "No Data Available",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+
+                                  return Scrollbar(
+                                    thickness: 10,
+                                    radius: Radius.circular(50),
+                                    // isAlwaysShown: true,
+                                    child: ListView(
+                                      scrollDirection: Axis.vertical,
+                                      padding: EdgeInsets.all(10),
+                                      children:
+                                          snapshot.data!.docs.map((document) {
+                                        return Container(
+                                          child: Center(
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                side: BorderSide(
+                                                    color: Colors.orange),
+                                              ),
+                                              color: Colors.grey.shade100,
+                                              child: InkWell(
+                                                splashColor:
+                                                    Colors.blue.withAlpha(30),
+                                                onTap: () {
+                                                  _launchURL(
+                                                      document['email'],
+                                                      'WE-SHARE Ride',
+                                                      'Message');
+                                                  // Navigator.of(context).push(MaterialPageRoute(
+                                                  //     builder: (context) => CardDetail()));
+                                                  // print('Card tapped.');
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        leading: Icon(Icons
+                                                            .account_circle),
+                                                        title: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              child: RichText(
+                                                                  text: TextSpan(
+                                                                      text: document[
+                                                                          'firstName'],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              20.0,
+                                                                          color: Colors
+                                                                              .black),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                    TextSpan(
+                                                                        text:
+                                                                            " "),
+                                                                    TextSpan(
+                                                                        text: document[
+                                                                            'secondName'],
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20.0,
+                                                                            color:
+                                                                                Colors.black))
+                                                                  ])),
+                                                            ),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'firstName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                            // SizedBox(width: 5),
+                                                            // Text(
+                                                            //     document[
+                                                            //         'secondName'],
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize:
+                                                            //           20.0,
+                                                            //     )),
+                                                          ],
+                                                        ),
+                                                        subtitle: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(top: 5),
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Expanded(
+                                                                    child:
+                                                                        RichText(
+                                                                            text: TextSpan(
+                                                                                text: document['source'],
+                                                                                style: TextStyle(fontSize: 17.0, color: Colors.black54),
+                                                                                children: <TextSpan>[
+                                                                          TextSpan(
+                                                                              text: " -> GNDEC",
+                                                                              style: TextStyle(fontSize: 16.0, color: Colors.black54))
+                                                                        ])),
+                                                                  ),
+                                                                  // Text(
+                                                                  //   document[
+                                                                  //       'source'],
+                                                                  //   style: TextStyle(
+                                                                  //       fontSize:
+                                                                  //           17),
+                                                                  // ),
+                                                                  // Text(
+                                                                  //     " -> GNDEC",
+                                                                  //     style: TextStyle(
+                                                                  //         fontSize:
+                                                                  //             16)),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 5),
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      document[
+                                                                          "email"],
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          letterSpacing:
+                                                                              0.8),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: <Widget>[
+                                                          SizedBox(width: 8),
+                                                          TextButton(
+                                                            child: Text(
+                                                              document['mode'],
+                                                              style: TextStyle(
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            onPressed: () {
+                                                              // print(Text(                                                                  '${loggedInUser.email}'));
+                                                              print(document[
+                                                                  "email"]);
+                                                            },
+                                                          ),
+                                                          SizedBox(width: 8),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                              "Please Delete your profile after successful Ride",
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 16,
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  //for (int i = 0; i < 2; i++) cardField
                 ],
               ),
             ),
@@ -471,17 +1519,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-  //       value: item,
-  //       child: Text(
-  //         item,
-  //         style: TextStyle(
-  //           fontWeight: FontWeight.bold,
-  //           fontSize: 20,
-  //         ),
-  //       ),
-  //     );
+  //email opening function
+  _launchURL(String toMailId, String subject, String body) async {
+    var url = 'mailto:$toMailId?subject=$subject&body=$body';
+    if (await canLaunch(url)) {
+      await launch(url);
+      Fluttertoast.showToast(msg: "Send to Gmail");
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
+  //Logout Function
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(

@@ -172,6 +172,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Colors.orange,
                             ),
                           ),
+                          labelText: "Ride Mode",
+                          labelStyle: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.orange,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          hintText: "${loggedInUser.mode}",
+                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      TextField(
+                        enabled: true,
+                        readOnly: true,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.orange,
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.orange,
+                            ),
+                          ),
                           labelText: "Source",
                           labelStyle: TextStyle(
                             fontSize: 20.0,
@@ -231,7 +263,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           minWidth: MediaQuery.of(context).size.width,
                           onPressed: () {
-                            deleteUser();
+                            showDialog(
+                                barrierColor: Colors.black54,
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                      title: Text("Delete Profile"),
+                                      content: Text("Do you want to delete ?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            deleteUser();
+                                          },
+                                          child: Text(
+                                            "Ok",
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            "Cancel",
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ));
+
                             // signIn(emailController.text, passwordController.text);
                           },
                           child: Text(
@@ -256,13 +319,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  //delete user
   Future<void>? deleteUser() {
     // FirebaseUser user= await FirebaseAuth.instance.currentUser();
     user!.delete();
     FirebaseFirestore.instance.collection("users").doc(user!.uid).delete().then(
         (value) => Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Start())));
-    Fluttertoast.showToast(msg: "User Deleted Completly");
+    Fluttertoast.showToast(msg: "User Deleted Successful");
     return null;
   }
 }
